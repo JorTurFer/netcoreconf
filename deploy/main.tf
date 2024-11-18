@@ -30,8 +30,8 @@ resource "azurerm_container_app" "example" {
 
   template {
     container {
-      name   = "examplecontainerapp"
-      image  = "mcr.microsoft.com/k8se/quickstart:latest"
+      name   = "web"
+      image  = var.web_tag
       cpu    = 0.25
       memory = "0.5Gi"
     }

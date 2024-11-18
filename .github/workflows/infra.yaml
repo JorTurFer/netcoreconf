@@ -47,10 +47,34 @@ jobs:
           -backend-config=resource_group_name=${{ secrets.BACKEND_STORAGE_RESOURCE_GROUP_NAME}}
         working-directory: deploy
 
+      - name: Docker meta
+        id: web-tag
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ghcr.io/JorTurFer/netcoreconf-2024-web
+          tags: |
+            type=sha
+      
+      - name: Docker meta
+        id: worker-tag
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ghcr.io/JorTurFer/netcoreconf-2024-worker
+          tags: |
+            type=sha
+
       - name: Terraform Plan
         run: terraform plan -out=plan.tfplan
         working-directory: deploy
+        env:
+          TF_VAR_web_tag: ${{ steps.web-tag.outputs.tags }}
+          TF_VAR_worker_tag: ${{ steps.worker-tag.outputs.tags }}
 
       - name: Terraform Apply
         run: terraform apply -input=false -auto-approve plan.tfplan
         working-directory: deploy
+        env:
+          TF_VAR_web_tag: ${{ steps.web-tag.outputs.tags }}
+          TF_VAR_worker_tag: ${{ steps.worker-tag.outputs.tags }}
