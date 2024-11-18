@@ -22,8 +22,8 @@ resource "azurerm_container_app_environment" "environment" {
   log_analytics_workspace_id = azurerm_log_analytics_workspace.log_analytics.id
 }
 
-resource "azurerm_container_app" "example" {
-  name                         = "${local.unique_name}-workload-demo"
+resource "azurerm_container_app" "web" {
+  name                         = "${local.unique_name}-web"
   container_app_environment_id = azurerm_container_app_environment.environment.id
   resource_group_name          = data.azurerm_resource_group.rg.name
   revision_mode                = "Single"
@@ -32,6 +32,22 @@ resource "azurerm_container_app" "example" {
     container {
       name   = "web"
       image  = var.web_tag
+      cpu    = 0.25
+      memory = "0.5Gi"
+    }
+  }
+}
+
+resource "azurerm_container_app" "worker" {
+  name                         = "${local.unique_name}-worker"
+  container_app_environment_id = azurerm_container_app_environment.environment.id
+  resource_group_name          = data.azurerm_resource_group.rg.name
+  revision_mode                = "Single"
+
+  template {
+    container {
+      name   = "worker"
+      image  = var.worker_tag
       cpu    = 0.25
       memory = "0.5Gi"
     }
