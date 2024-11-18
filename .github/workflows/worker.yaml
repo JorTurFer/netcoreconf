@@ -1,4 +1,4 @@
-name: worker
+name: Build worker
 
 on:
   push:
