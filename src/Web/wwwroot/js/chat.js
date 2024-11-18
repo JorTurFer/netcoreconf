@@ -19,7 +19,6 @@ function showOrderQueue(nrMessages) {
 
             response.json().then(function (data) {
                 console.log(data);
-                document.getElementById("workers").innerHTML = data.workersCount;
                 var measure = [
                     {
                         language: '',
