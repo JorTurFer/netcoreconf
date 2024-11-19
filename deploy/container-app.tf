@@ -18,23 +18,23 @@ resource "azurerm_container_app" "web" {
   container_app_environment_id = azurerm_container_app_environment.environment.id
   resource_group_name          = data.azurerm_resource_group.rg.name
   revision_mode                = "Single"
-  
+
   ingress {
-    external_enabled = true
+    external_enabled           = true
     allow_insecure_connections = false
-    target_port = 8080
+    target_port                = 8080
     traffic_weight {
       latest_revision = true
-      percentage = 100
+      percentage      = 100
     }
   }
 
   secret {
-    name = "servicebus"
+    name  = "servicebus"
     value = azurerm_servicebus_namespace_authorization_rule.web.primary_connection_string
   }
 
-  template {   
+  template {
     container {
       name   = "web"
       image  = var.web_tag
@@ -42,7 +42,7 @@ resource "azurerm_container_app" "web" {
       memory = "0.5Gi"
 
       env {
-        name = "ConnectionStrings__ServiceBus"
+        name        = "ConnectionStrings__ServiceBus"
         secret_name = "servicebus"
       }
     }
@@ -55,12 +55,35 @@ resource "azurerm_container_app" "worker" {
   resource_group_name          = data.azurerm_resource_group.rg.name
   revision_mode                = "Single"
 
+  secret {
+    name  = "servicebus-worker"
+    value = azurerm_servicebus_namespace_authorization_rule.worker.primary_connection_string
+  }
+
+  secret {
+    name  = "servicebus-autoscaler"
+    value = azurerm_servicebus_namespace_authorization_rule.autoscaler.primary_connection_string
+  }
+
   template {
     container {
       name   = "worker"
       image  = var.worker_tag
       cpu    = 0.25
       memory = "0.5Gi"
+    }
+    max_replicas = 2
+    custom_scale_rule {
+      name             = "queue-based-autoscaling"
+      custom_rule_type = "azure-servicebus"
+      metadata = {
+        queueName : "orders",
+        messageCount : "20"
+      }
+      authentication {
+        secret_name       = "servicebus-autoscaler"
+        trigger_parameter = "connection"
+      }
     }
   }
 }

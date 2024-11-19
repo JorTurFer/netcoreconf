@@ -4,5 +4,5 @@ locals {
 }
 
 data "azurerm_resource_group" "rg" {
-  name     = local.unique_name
+  name = local.unique_name
 }

@@ -20,8 +20,8 @@ resource "azurerm_servicebus_namespace_authorization_rule" "autoscaler" {
   name         = "autoscaler"
   namespace_id = azurerm_servicebus_namespace.servicebus.id
 
-  listen = true
-  send   = true
+  listen = false
+  send   = false
   manage = true
 }
 
@@ -30,8 +30,8 @@ resource "azurerm_servicebus_namespace_authorization_rule" "worker" {
   namespace_id = azurerm_servicebus_namespace.servicebus.id
 
   listen = true
-  send   = true
-  manage = true
+  send   = false
+  manage = false
 }
 
 resource "azurerm_servicebus_namespace_authorization_rule" "web" {
