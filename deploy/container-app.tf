@@ -13,6 +13,25 @@ resource "azurerm_container_app_environment" "environment" {
   log_analytics_workspace_id = azurerm_log_analytics_workspace.log_analytics.id
 }
 
+resource "azurerm_container_app_environment_dapr_component" "servicebus" {
+  name                         = "service-bus-queue"
+  container_app_environment_id = azurerm_container_app_environment.environment.id
+  component_type               = "bindings.azure.servicebusqueues"
+  version                      = "v1"
+  secret {
+    name  = "connection-string"
+    value = azurerm_servicebus_namespace_authorization_rule.worker.primary_connection_string
+  }
+  metadata {
+    name  = "queueName"
+    value = "orders"
+  }
+  metadata {
+    name        = "connectionString"
+    secret_name = "connection-string"
+  }
+}
+
 resource "azurerm_container_app" "web" {
   name                         = "${local.unique_name}-web"
   container_app_environment_id = azurerm_container_app_environment.environment.id
@@ -56,13 +75,12 @@ resource "azurerm_container_app" "worker" {
   revision_mode                = "Single"
 
   secret {
-    name  = "servicebus-worker"
-    value = azurerm_servicebus_namespace_authorization_rule.worker.primary_connection_string
-  }
-
-  secret {
     name  = "servicebus-autoscaler"
     value = azurerm_servicebus_namespace_authorization_rule.autoscaler.primary_connection_string
+  }
+
+  dapr {
+    app_id = azurerm_container_app_environment_dapr_component.servicebus.id
   }
 
   template {
