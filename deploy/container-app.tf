@@ -73,6 +73,7 @@ resource "azurerm_container_app" "worker" {
       memory = "0.5Gi"
     }
     max_replicas = 2
+    min_replicas = 0
     custom_scale_rule {
       name             = "queue-based-autoscaling"
       custom_rule_type = "azure-servicebus"
