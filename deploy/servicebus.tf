@@ -30,8 +30,8 @@ resource "azurerm_servicebus_namespace_authorization_rule" "worker" {
   namespace_id = azurerm_servicebus_namespace.servicebus.id
 
   listen = true
-  send   = false
-  manage = false
+  send   = true
+  manage = true
 }
 
 resource "azurerm_servicebus_namespace_authorization_rule" "web" {

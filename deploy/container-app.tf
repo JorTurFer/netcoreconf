@@ -83,7 +83,7 @@ resource "azurerm_container_app" "worker" {
   dapr {
     app_id       = "keda-dapr"
     app_protocol = "http"
-    app_port     = 80
+    app_port     = 8080
   }
 
   template {
