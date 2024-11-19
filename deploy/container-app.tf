@@ -93,14 +93,14 @@ resource "azurerm_container_app" "worker" {
       cpu    = 0.25
       memory = "0.5Gi"
     }
-    max_replicas = 2
+    max_replicas = 10
     min_replicas = 0
     custom_scale_rule {
       name             = "queue-based-autoscaling"
       custom_rule_type = "azure-servicebus"
       metadata = {
         queueName : "orders",
-        messageCount : "20"
+        messageCount : "5"
       }
       authentication {
         secret_name       = "servicebus-autoscaler"
