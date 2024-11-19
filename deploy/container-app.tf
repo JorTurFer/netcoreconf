@@ -30,6 +30,7 @@ resource "azurerm_container_app_environment_dapr_component" "servicebus" {
     name        = "connectionString"
     secret_name = "connection-string"
   }
+  scopes = ["keda-dapr"]
 }
 
 resource "azurerm_container_app" "web" {
@@ -80,7 +81,9 @@ resource "azurerm_container_app" "worker" {
   }
 
   dapr {
-    app_id = azurerm_container_app_environment_dapr_component.servicebus.id
+    app_id       = "keda-dapr"
+    app_port     = "http"
+    app_protocol = 80
   }
 
   template {
