@@ -30,7 +30,7 @@ resource "azurerm_container_app" "web" {
   }
 
   secret {
-    name = "ConnectionStrings__ServiceBus"
+    name = "servicebus"
     value = azurerm_servicebus_namespace_authorization_rule.web.primary_connection_string
   }
 
@@ -40,6 +40,11 @@ resource "azurerm_container_app" "web" {
       image  = var.web_tag
       cpu    = 0.25
       memory = "0.5Gi"
+
+      env {
+        name = "ConnectionStrings__ServiceBus"
+        secret_name = "servicebus"
+      }
     }
   }
 }
