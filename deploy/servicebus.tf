@@ -22,7 +22,7 @@ resource "azurerm_servicebus_namespace_authorization_rule" "autoscaler" {
 
   listen = true
   send   = true
-  manage = false
+  manage = true
 }
 
 resource "azurerm_servicebus_namespace_authorization_rule" "worker" {
@@ -31,7 +31,7 @@ resource "azurerm_servicebus_namespace_authorization_rule" "worker" {
 
   listen = true
   send   = true
-  manage = false
+  manage = true
 }
 
 resource "azurerm_servicebus_namespace_authorization_rule" "web" {
@@ -40,5 +40,5 @@ resource "azurerm_servicebus_namespace_authorization_rule" "web" {
 
   listen = true
   send   = true
-  manage = false
+  manage = true
 }
