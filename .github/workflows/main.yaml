@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - "**.tf"
-      - ".github/workflows/terraform.yaml"
+      - ".github/workflows/main.yaml"
   workflow_dispatch:
 
 concurrency: terraform
