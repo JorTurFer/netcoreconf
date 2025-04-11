@@ -30,7 +30,7 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            ghcr.io/JorTurFer/netcoreconf-2024-web
+            ghcr.io/JorTurFer/netcoreconf-web
           tags: |
             type=sha
 
@@ -70,7 +70,7 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            ghcr.io/JorTurFer/netcoreconf-2024-worker
+            ghcr.io/JorTurFer/netcoreconf-worker
           tags: |
             type=sha
 
@@ -133,7 +133,7 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            ghcr.io/JorTurFer/netcoreconf-2024-web
+            ghcr.io/JorTurFer/netcoreconf-web
           tags: |
             type=sha
       
@@ -142,7 +142,7 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            ghcr.io/JorTurFer/netcoreconf-2024-worker
+            ghcr.io/JorTurFer/netcoreconf-worker
           tags: |
             type=sha
 
